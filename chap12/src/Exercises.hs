@@ -12,6 +12,9 @@ module Exercises where
     pura :: a -> f a
     (<~>) :: f (a -> b) -> f a -> f b
 
+
+  -- bljad!!!!
+  
   instance Functar ((->)a) where
     ffmap f x = f . x
 
