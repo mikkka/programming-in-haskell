@@ -1,5 +1,9 @@
 module Main where
 
+--import Tree
+import Generig
+import Exercises
+
 main :: IO ()
 main = putStrLn "hello chap 12 - some funcy concepts"
 
@@ -14,12 +18,6 @@ instance Functar Maybe where
   fmap _ Nothing = Nothing
   fmap g (Just x) = Just (g x)
 -}
-
-data Tree a = Leaf a | Node (Tree a) (Tree a) deriving Show
-
-instance Functor Tree where 
-  fmap g (Leaf a) = Leaf (g a)
-  fmap g (Node l r) = (Node (fmap g l) (fmap g r))
 
 lst1 :: [Int]
 lst1 = pure (*) <*> [1,2,3] <*> [5,6,7]
