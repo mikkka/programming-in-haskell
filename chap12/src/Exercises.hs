@@ -5,21 +5,17 @@ module Exercises where
     fmap g Leaf = Leaf
     fmap g (Node l m r) = Node (fmap g l) (g m) (fmap g r)
 
-  class Functar f where
-    ffmap :: (a -> b) -> f a -> f b
-
-  class Aapplicative f where
-    pura :: a -> f a
-    (<~>) :: f (a -> b) -> f a -> f b
-
-
   -- bljad!!!!
-  
-  instance Functar ((->)a) where
-    ffmap f x = f . x
+  newtype PartFun a b = PF{pfapp :: (a -> b)}
+  --pfapp :: PartFun a b -> (a -> b)
+  --pfapp (PF f) = f
 
-  instance Aapplicative ((->)s) where
-    pura = const
-    -- (s -> a -> b) -> (s -> a) -> (s -> b)
-    (<~>) fsab fa = \s -> fsab s (fa s)
-    --(<~>) fsab fa s = fsab s (fa s)
+  instance Functor (PartFun s) where
+    --(a -> b) -> PartFun(s -> a) -> PartFun(s -> b)
+    fmap f pfa = PF(f. (pfapp pfa))
+
+  instance Applicative (PartFun s) where
+    -- a -> PartFun(s -> a)
+    pure a = PF(const a)
+    -- PartFun(s -> a -> b) -> PartFun(s -> a) -> PartFun(s -> b)
+    (<*>) fsab fa = PF(\s -> (pfapp fsab) s ((pfapp fa) s))
