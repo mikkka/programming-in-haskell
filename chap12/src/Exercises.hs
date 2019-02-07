@@ -23,3 +23,15 @@ module Exercises where
   instance Monad (PartFun s) where
     -- PartFun(s -> a) -> (a -> PartFun(s -> b)) -> PartFun(s -> b)
     (>>=) (PF a) amb = PF(\s -> (pfapp (amb (a s)) s))
+
+  
+  newtype ZipList a = Z [a] deriving Show
+  instance Functor ZipList where
+    -- (a -> b) -> ZipList a -> ZipList b
+    fmap f (Z xs)     = Z (fmap f xs)
+
+  instance Applicative ZipList where
+    pure x = Z (repeat x)
+
+    (Z fs) <*> (Z xs) = Z [f x | (f,x) <- zip fs xs]
+  
