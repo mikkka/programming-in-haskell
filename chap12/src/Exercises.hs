@@ -12,10 +12,14 @@ module Exercises where
 
   instance Functor (PartFun s) where
     --(a -> b) -> PartFun(s -> a) -> PartFun(s -> b)
-    fmap f pfa = PF(f. (pfapp pfa))
+    fmap f (PF a) = PF(f . a)
 
   instance Applicative (PartFun s) where
     -- a -> PartFun(s -> a)
     pure a = PF(const a)
     -- PartFun(s -> a -> b) -> PartFun(s -> a) -> PartFun(s -> b)
-    (<*>) fsab fa = PF(\s -> (pfapp fsab) s ((pfapp fa) s))
+    (<*>) (PF sab) (PF a) = PF(\s -> sab s (a s))
+
+  instance Monad (PartFun s) where
+    -- PartFun(s -> a) -> (a -> PartFun(s -> b)) -> PartFun(s -> b)
+    (>>=) (PF a) amb = PF(\s -> (pfapp (amb (a s)) s))
