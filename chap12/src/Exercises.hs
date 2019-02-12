@@ -35,3 +35,25 @@ module Exercises where
 
     (Z fs) <*> (Z xs) = Z [f x | (f,x) <- zip fs xs]
   
+  data Exprr a = Varr a | Vall Int | Addd (Exprr a) (Exprr a)
+  instance Functor Exprr where
+    -- (a -> b) -> Expr
+    fmap f (Varr a)     = Varr (f a)
+    fmap f (Vall x)     = Vall x
+    fmap f (Addd l r)   = Addd (fmap f l) (fmap f r)
+
+  instance Applicative Exprr where
+    pure = Varr
+  
+    -- Exprr(a -> b) -> Exprr(a) -> Exprr(b)
+    -- exf <*> exa = ???
+    (Varr f) <*> e      = fmap f e
+    (Addd fl fr) <*> e  = Addd (fl <*> e) (fr <*> e)
+    (Vall x) <*> _      = Vall x
+
+  instance Monad Exprr where
+    --(>>=) :: ma -> (a -> mb) -> mb
+    
+    (Varr a)    >>= f = f a
+    (Addd l r)  >>= f = Addd (l >>= f) (r >>= f)
+    (Vall x)    >>= f = Vall x
