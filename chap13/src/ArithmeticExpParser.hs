@@ -3,14 +3,20 @@ module ArithmeticExpParser where
   import Parser
 
 
-  -- expr ::= term ( + expr | E)
+  -- expr ::= term ( + expr | - expr | E)
 
   expr :: Parser Int
   expr = 
-    term >>= \t -> (
+    term >>= \t -> 
+              (
                 symbol "+" >> 
                 expr >>= \e -> return (t + e)
-              ) 
+              )  
+              <|> 
+              (
+                symbol "-" >> 
+                expr >>= \e -> return (t - e)
+              )  
               <|> return t
       -- do 
       --   t <- term
@@ -20,18 +26,24 @@ module ArithmeticExpParser where
       --     return (t + e)
       --     <|> return t
 
--- term ::= factor (* term | E)
+-- term ::= factor ( * term | / term | E)
 
   term :: Parser Int
   term =  
-    factor >>= \f -> (
+    factor >>= \f -> 
+                (
                   symbol "*" >> 
                   term >>= \t -> return (f * t)
+                ) 
+                <|>
+                (
+                  symbol "/" >> 
+                  term >>= \t -> return (f `div` t)
                 ) 
                 <|> return f
 
       -- do 
-      --   f <- factor
+      --   f <- factorG
       --   do 
       --     symbol "*"
       --     t <- term
