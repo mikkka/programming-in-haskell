@@ -43,7 +43,7 @@ module ArithmeticExpParser where
                 <|> return f
 
       -- do 
-      --   f <- factorG
+      --   f <- factor
       --   do 
       --     symbol "*"
       --     t <- term
