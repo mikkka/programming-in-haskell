@@ -7,22 +7,22 @@ module ArithmeticExpParser where
 
   expr :: Parser Int
   expr = 
-    term >>= \t ->
-              (
+    term >>= \t -> (
                 symbol "+" >> 
                 expr >>= \e -> return (t + e)
               ) 
               <|> return t
       -- do 
-      --   symbol "+"
-      --   e <- expr
-      --   return (t + e)
-      --   <|> return t
+      --   t <- term
+      --   do 
+      --     symbol "+"
+      --     e <- expr
+      --     return (t + e)
+      --     <|> return t
 
   term :: Parser Int
   term =  
-    factor >>= \f -> 
-                (
+    factor >>= \f -> (
                   symbol "*" >> 
                   term >>= \t -> return (f * t)
                 ) 
@@ -39,11 +39,11 @@ module ArithmeticExpParser where
 
 
   factor :: Parser Int
-  factor = 
-    (
-      symbol "(" >> expr >>= \e -> symbol ")" >> return e
-    )
-    <|> natural
+  factor =  (
+              symbol "(" >> 
+              expr >>= \e -> symbol ")" >> return e
+            )
+            <|> natural
 
 
       -- do
