@@ -3,7 +3,7 @@ module ArithmeticExpParser where
   import Parser
 
 
-  -- expr ::= term (+ expr | E)
+  -- expr ::= term ( + expr | E)
 
   expr :: Parser Int
   expr = 
@@ -19,6 +19,8 @@ module ArithmeticExpParser where
       --     e <- expr
       --     return (t + e)
       --     <|> return t
+
+-- term ::= factor (* term | E)
 
   term :: Parser Int
   term =  
@@ -37,6 +39,7 @@ module ArithmeticExpParser where
       --     <|> pure f
 
 
+-- factor ::= ( expr ) | nat
 
   factor :: Parser Int
   factor =  (
